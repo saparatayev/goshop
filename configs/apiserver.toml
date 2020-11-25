@@ -1,0 +1,4 @@
+bind_addr = ":8081"
+log_level = "debug"
+database_url = "root@tcp(localhost:3306)/goshop?charset=utf8&interpolateParams=true"
+session_key = "38afes7a8"
