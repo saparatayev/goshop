@@ -2,7 +2,6 @@ package apiserver
 
 import (
 	"database/sql"
-	"goshop/internal/app/store/sqlstore"
 	"net/http"
 )
 
@@ -14,9 +13,9 @@ func Start(config *Config) error {
 	defer db.Close()
 
 	// sessionStore := sessions.NewCookieStore([]byte(config.SessionKey))
-	store := sqlstore.New(db)
+	// store := sqlstore.New(db)
 
-	srv := newServer(store, nil)
+	srv := newServer(nil, nil)
 	// srv := newServer(store, sessionStore)
 
 	return http.ListenAndServe(config.BindAddr, srv)

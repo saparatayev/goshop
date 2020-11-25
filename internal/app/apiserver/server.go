@@ -2,7 +2,6 @@ package apiserver
 
 import (
 	"context"
-	"goshop/internal/app/store"
 	"net/http"
 	"time"
 
@@ -18,16 +17,17 @@ const (
 )
 
 type server struct {
-	router       *mux.Router
-	logger       *logrus.Logger
-	store        store.Store
+	router *mux.Router
+	logger *logrus.Logger
+	store  interface{}
+	// store        store.Store
 	sessionStore interface{}
 	// sessionStore sessions.Store
 }
 
 type ctxKey int8
 
-func newServer(store store.Store, sessionStore interface{}) *server {
+func newServer(store interface{}, sessionStore interface{}) *server {
 	s := &server{
 		router:       mux.NewRouter(),
 		logger:       logrus.New(),
