@@ -2,6 +2,7 @@ package apiserver
 
 import (
 	"database/sql"
+	"fmt"
 	"net/http"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -32,6 +33,8 @@ func newDB(databaseURL string) (*sql.DB, error) {
 	if err := db.Ping(); err != nil {
 		return nil, err
 	}
+
+	fmt.Println("Database connection established")
 
 	return db, nil
 }
