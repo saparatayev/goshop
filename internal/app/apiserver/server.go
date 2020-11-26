@@ -2,8 +2,11 @@ package apiserver
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 	"time"
+
+	"goshop/internal/app/utils"
 
 	"github.com/google/uuid"
 	"github.com/gorilla/mux"
@@ -12,8 +15,10 @@ import (
 
 const (
 	// sessionName        = "gopherschool"
-	ctxKeyUser ctxKey = iota
-	ctxKeyRequestID
+	// ctxKeyUser ctxKey = iota
+	// ctxKeyRequestID
+
+	ctxKeyRequestID = iota
 )
 
 type server struct {
@@ -25,7 +30,7 @@ type server struct {
 	// sessionStore sessions.Store
 }
 
-type ctxKey int8
+// type ctxKey int8
 
 func newServer(store interface{}, sessionStore interface{}) *server {
 	s := &server{
@@ -34,6 +39,8 @@ func newServer(store interface{}, sessionStore interface{}) *server {
 		store:        store,
 		sessionStore: sessionStore,
 	}
+
+	fmt.Println("Server configs established")
 
 	s.configureRouter()
 
@@ -47,6 +54,10 @@ func (s *server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 func (s *server) configureRouter() {
 	s.router.Use(s.setRequestID)
 	s.router.Use(s.logRequest)
+
+	s.router.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("./assets/"))))
+
+	s.router.HandleFunc("/", s.handleIndex()).Methods(http.MethodGet)
 	// s.router.Use(handlers.CORS(handlers.AllowedOrigins([]string{"*"})))
 	// s.router.HandleFunc("/users", s.handleUsersCreate()).Methods("POST")
 	// s.router.HandleFunc("/sessions", s.handleSessionsCreate()).Methods("POST")
@@ -77,4 +88,23 @@ func (s *server) logRequest(next http.Handler) http.Handler {
 
 		logger.Infof("completed in %v", time.Now().Sub(start))
 	})
+}
+
+func (s *server) handleIndex() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+
+		utils.ExecuteTemplate(w, "index", struct {
+			MyHeader string
+		}{
+			MyHeader: "this is index page",
+		})
+
+		// t, err := template.ParseFiles("views/footer.html", "views/header/html", "views/index.html")
+		// if err != nil {
+		// 	fmt.Fprintf(w, err.Error())
+		// }
+
+		// t.ExecuteTemplate(w, "index", )
+	}
 }
