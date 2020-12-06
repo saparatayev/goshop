@@ -55,7 +55,10 @@ func (s *server) configureRouter() {
 	s.router.Use(s.setRequestID)
 	s.router.Use(s.logRequest)
 
-	s.router.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("./assets/"))))
+	staticDir := "/assets/"
+	s.router.
+		PathPrefix(staticDir).
+		Handler(http.StripPrefix(staticDir, http.FileServer(http.Dir("."+staticDir))))
 
 	s.router.HandleFunc("/", s.handleIndex()).Methods(http.MethodGet)
 	// s.router.Use(handlers.CORS(handlers.AllowedOrigins([]string{"*"})))
@@ -99,12 +102,5 @@ func (s *server) handleIndex() http.HandlerFunc {
 		}{
 			MyHeader: "this is index page",
 		})
-
-		// t, err := template.ParseFiles("views/footer.html", "views/header/html", "views/index.html")
-		// if err != nil {
-		// 	fmt.Fprintf(w, err.Error())
-		// }
-
-		// t.ExecuteTemplate(w, "index", )
 	}
 }
