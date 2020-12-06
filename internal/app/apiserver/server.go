@@ -4,9 +4,8 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"text/template"
 	"time"
-
-	"goshop/internal/app/utils"
 
 	"github.com/google/uuid"
 	"github.com/gorilla/mux"
@@ -97,7 +96,11 @@ func (s *server) handleIndex() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
 
-		utils.ExecuteTemplate(w, "index", struct {
+		// myvar := map[string]interface{}{"MyHeader": "this is index page"}
+
+		t, _ := template.ParseFiles("./views/layout.html", "./views/index.html")
+
+		t.ExecuteTemplate(w, "layout", struct {
 			MyHeader string
 		}{
 			MyHeader: "this is index page",

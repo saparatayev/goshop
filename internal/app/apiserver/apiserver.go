@@ -3,7 +3,6 @@ package apiserver
 import (
 	"database/sql"
 	"fmt"
-	"goshop/internal/app/utils"
 	"net/http"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -21,8 +20,6 @@ func Start(config *Config) error {
 
 	srv := newServer(nil, nil)
 	// srv := newServer(store, sessionStore)
-
-	utils.LoadTemplates("views/*.html")
 
 	return http.ListenAndServe(config.BindAddr, srv)
 }
