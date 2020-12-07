@@ -3,6 +3,7 @@ package apiserver
 import (
 	"database/sql"
 	"fmt"
+	"goshop/internal/app/store/sqlstore"
 	"net/http"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -16,9 +17,9 @@ func Start(config *Config) error {
 	defer db.Close()
 
 	// sessionStore := sessions.NewCookieStore([]byte(config.SessionKey))
-	// store := sqlstore.New(db)
+	store := sqlstore.New(db)
 
-	srv := newServer(nil, nil)
+	srv := newServer(store, nil)
 	// srv := newServer(store, sessionStore)
 
 	return http.ListenAndServe(config.BindAddr, srv)
