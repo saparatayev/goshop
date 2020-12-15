@@ -90,7 +90,7 @@ func (s *server) handleIndex() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
 
-		// myvar := map[string]interface{}{"MyHeader": "this is index page"}
+		latestProds, err := s.store.Product().GetLatestProds()
 
 		t, _ := template.ParseFiles("./views/layout.html", "./views/index.html")
 

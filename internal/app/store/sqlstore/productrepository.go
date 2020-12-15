@@ -1,7 +1,11 @@
 package sqlstore
 
+import "goshop/internal/app/model"
+
 type ProductRepository struct {
 	store *Store
 }
 
-// func GetProducts
+func GetLatestProds() ([]model.Product, error) {
+
+}
