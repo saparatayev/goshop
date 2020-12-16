@@ -6,6 +6,6 @@ type ProductRepository struct {
 	store *Store
 }
 
-func GetLatestProds() ([]model.Product, error) {
+func (r *ProductRepository) GetLatestProds() ([]model.Product, error) {
 
 }
